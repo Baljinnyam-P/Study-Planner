@@ -21,3 +21,4 @@ gunicorn
 pymysql
 cryptography
 Flask-Migrate
+psycopg2-binary
