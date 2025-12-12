@@ -5,6 +5,21 @@
 
 Study Planner is a modern, collaborative web application for managing personal and group study plans. It features a Flask backend and a React frontend, supporting authentication, Plan generation, drag-and-drop editing, and group collaboration. The project is designed for extensibility, maintainability, and a seamless user experience.
 
+
+## Features
+
+- User registration, login, and JWT authentication
+- Personal and group study plans
+- Round-Robin plan generation
+- Drag-and-drop task editing and rescheduling
+- Plan preview modal with inline editing
+- Group invites and collaboration
+- Notifications for group invites
+- Color-coded, responsive plan grid
+- Robust validation and error handling
+- Modern, responsive UI with Tailwind CSS
+- Extensible architecture for future features
+
 ## Documentation
 
 All architectural and design decisions are documented directly in the codebase as high-level "why" comments and docstrings. Please refer to the code files for detailed explanations of technology choices, design patterns, and implementation rationale.
