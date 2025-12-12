@@ -20,3 +20,4 @@ werkzeug
 gunicorn
 pymysql
 cryptography
+Flask-Migrate
