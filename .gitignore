@@ -1,0 +1,53 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.sqlite3
+*.db
+instance/
+.env
+.env.*
+.mypy_cache/
+.pytest_cache/
+migrations/
+
+# Node
+node_modules/
+dist/
+build/
+.env
+.env.*
+
+# VSCode
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Frontend build
+frontend/dist/
+frontend/node_modules/
+frontend/.env
+
+# Backend
+backend/__pycache__/
+backend/*.pyc
+backend/*.pyo
+backend/*.pyd
+backend/instance/
+backend/.env
+backend/.env.*
+backend/migrations/
+
+# Misc
+*.swp
+*.swo
+
+# Ignore local dev/test files
+*.local
+*.test

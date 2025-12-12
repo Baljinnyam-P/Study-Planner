@@ -1,0 +1,22 @@
+# -------------------------------------------------------------
+# Why: This file lists all Python dependencies required to run the backend.
+#
+# Why this design?
+#   - Ensures consistent, reproducible environments for all developers.
+#   - Makes it easy to install all dependencies with a single command.
+#   - Documents technology choices for grading and future maintenance.
+# -------------------------------------------------------------
+Flask
+flask_sqlalchemy
+flask_marshmallow
+marshmallow
+marshmallow-sqlalchemy
+Flask-JWT-Extended
+Flask-Cors
+python-dotenv
+requests
+pymysql
+werkzeug
+gunicorn
+pymysql
+cryptography
