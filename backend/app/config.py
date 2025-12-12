@@ -14,25 +14,26 @@ class Config:
     SECRET_KEY = os.getenv("SECRET_KEY", "dev-secret")
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret")
 
-    # Validate required DB environment variables
-    _db_user = os.environ.get('DB_USER')
-    _db_password = os.environ.get('DB_PASSWORD')
-    _db_host = os.environ.get('DB_HOST')
-    _db_port = os.environ.get('DB_PORT')
-    _db_name = os.environ.get('DB_NAME')
-    missing = [var for var, val in {
-        'DB_USER': _db_user,
-        'DB_PASSWORD': _db_password,
-        'DB_HOST': _db_host,
-        'DB_PORT': _db_port,
-        'DB_NAME': _db_name
-    }.items() if not val]
-    if missing:
-        raise RuntimeError(f"Missing required DB environment variables: {', '.join(missing)}")
-
-    SQLALCHEMY_DATABASE_URI = (
-        f"mysql+pymysql://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
-    )
+    # Prefer DATABASE_URL if set (for production/Render), else build from individual vars (for local dev)
+    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    if not SQLALCHEMY_DATABASE_URI:
+        _db_user = os.environ.get('DB_USER')
+        _db_password = os.environ.get('DB_PASSWORD')
+        _db_host = os.environ.get('DB_HOST')
+        _db_port = os.environ.get('DB_PORT')
+        _db_name = os.environ.get('DB_NAME')
+        missing = [var for var, val in {
+            'DB_USER': _db_user,
+            'DB_PASSWORD': _db_password,
+            'DB_HOST': _db_host,
+            'DB_PORT': _db_port,
+            'DB_NAME': _db_name
+        }.items() if not val]
+        if missing:
+            raise RuntimeError(f"Missing required DB environment variables: {', '.join(missing)}")
+        SQLALCHEMY_DATABASE_URI = (
+            f"mysql+pymysql://{_db_user}:{_db_password}@{_db_host}:{_db_port}/{_db_name}"
+        )
     SQLALCHEMY_TRACK_MODIFICATIONS = False
 
 
