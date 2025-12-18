@@ -98,4 +98,9 @@ export const getNotifications = (params) => api.get('/notifications', { params }
 export const markNotificationRead = (id) => api.post(`/notifications/${id}/read`);
 export const deleteNotification = (id) => api.delete(`/notifications/${id}`);
 
+// --- Public Sharing API ---
+// Why: Enable toggling public sharing and fetching public plans by ID.
+export const togglePlanShare = (plan_id, is_public) => api.post(`/public/share/${plan_id}`, { is_public });
+export const getPublicPlan = (public_id) => api.get(`/public/plans/${public_id}`);
+
 export default api;

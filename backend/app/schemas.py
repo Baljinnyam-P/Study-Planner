@@ -121,6 +121,9 @@ class TaskSchema(ma.Schema):
     due_date = fields.DateTime(allow_none=True)
     priority = fields.Int(validate=validate.Range(min=1, max=5))
     completed = fields.Bool()
+    depends_on_id = fields.Int(allow_none=True)
+    recurrence = fields.Str(allow_none=True)
+    reminder_minutes_before = fields.Int(allow_none=True)
     created_at = fields.DateTime(dump_only=True)
 
 task_schema = TaskSchema()
@@ -132,6 +135,8 @@ class StudyPlanSchema(ma.Schema):
     title = fields.Str()
     content = fields.Dict(required=True)
     generated_at = fields.DateTime(dump_only=True)
+    is_public = fields.Bool()
+    public_id = fields.Str(allow_none=True)
 
 plan_schema = StudyPlanSchema()
 plans_schema = StudyPlanSchema(many=True)

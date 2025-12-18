@@ -15,7 +15,14 @@ class Config:
     JWT_SECRET_KEY = os.getenv("JWT_SECRET_KEY", "jwt-secret")
 
     # Prefer DATABASE_URL if set (for production/Render), else build from individual vars (for local dev)
-    SQLALCHEMY_DATABASE_URI = os.environ.get('DATABASE_URL')
+    # Normalize DATABASE_URL for SQLAlchemy across providers
+    _raw_uri = os.environ.get('DATABASE_URL')
+    if _raw_uri and _raw_uri.startswith('postgres://'):
+        _raw_uri = _raw_uri.replace('postgres://', 'postgresql://', 1)
+    if _raw_uri and _raw_uri.startswith('mysql://'):
+        _raw_uri = _raw_uri.replace('mysql://', 'mysql+pymysql://', 1)
+
+    SQLALCHEMY_DATABASE_URI = _raw_uri
     if not SQLALCHEMY_DATABASE_URI:
         _db_user = os.environ.get('DB_USER')
         _db_password = os.environ.get('DB_PASSWORD')

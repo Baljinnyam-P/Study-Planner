@@ -20,6 +20,13 @@ export default function NotificationBell() {
     return () => clearInterval(interval);
   }, []);
 
+  // Refresh on socket-driven notify events
+  useEffect(()=>{
+    function onNotify(){ loadNotifications() }
+    window.addEventListener('sp-notify', onNotify)
+    return ()=> window.removeEventListener('sp-notify', onNotify)
+  }, [])
+
   useEffect(() => {
     function handleClick(e) {
       if (bellRef.current && !bellRef.current.contains(e.target)) setOpen(false);

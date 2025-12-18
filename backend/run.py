@@ -35,6 +35,24 @@ import os
 load_dotenv(os.path.join(os.path.dirname(__file__), '.env'))
 
 from app.main import create_app
+from app.extensions import socketio, db
+from flask_migrate import Migrate
 app = create_app()
+"""
+Optional: Apply DB migrations automatically on start.
+Enable by setting environment variable AUTO_MIGRATE_ON_START=1.
+This is useful on Render when shell access is disabled.
+"""
+try:
+    if os.getenv("AUTO_MIGRATE_ON_START") == "1":
+        Migrate(app, db)
+        from flask_migrate import upgrade
+        with app.app_context():
+            upgrade()
+        print("[startup] Applied DB migrations (upgrade head)")
+except Exception as e:
+    print(f"[startup] Migration on start failed: {e}")
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    # Use Socket.IO server to enable WebSocket/long-polling transport
+    port = int(os.getenv('PORT', '5000'))
+    socketio.run(app, host='0.0.0.0', port=port, debug=True)

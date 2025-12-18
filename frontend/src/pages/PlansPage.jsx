@@ -7,15 +7,19 @@
 //Follows SPA best practices for modular, page-based UI.
 // -------------------------------------------------------------
 import React, { useEffect, useState } from 'react'
-import api from '../api/axios'
+import api, { togglePlanShare } from '../api/axios'
+import { downloadICS } from '../lib/ics'
 import Banner from '../components/Banner'
 import { useBanner } from '../hooks/useBanner'
+import PlanPresence from '../components/PlanPresence'
+import { useAuth } from '../contexts/AuthContext'
 const dayColors = [
   'bg-blue-100', 'bg-green-100', 'bg-yellow-100', 'bg-pink-100', 'bg-purple-100',
   'bg-orange-100', 'bg-teal-100', 'bg-indigo-100', 'bg-red-100', 'bg-gray-100'
 ];
 
 export default function PlansPage(){
+  const { user } = useAuth()
   const [plans, setPlans] = useState([])
   const [modalPlan, setModalPlan] = useState(null)
   const banner = useBanner()
@@ -27,6 +31,24 @@ export default function PlansPage(){
   async function deletePlan(id){
     try { await api.delete(`/plans/${id}`); setPlans(plans.filter(p=>p.id!==id)); banner.show('Plan deleted', 'success') }
     catch (e) { banner.show(e?.response?.data?.msg || 'Delete failed', 'error') }
+  }
+  async function onToggleShare(e, plan){
+    e.stopPropagation()
+    try {
+      const next = !plan.is_public
+      const res = await togglePlanShare(plan.id, next)
+      const { is_public, public_id } = res.data
+      setPlans(plans.map(p => p.id === plan.id ? { ...p, is_public, public_id } : p))
+      banner.show(is_public ? 'Plan is now public' : 'Plan is now private', 'success')
+    } catch (err){
+      banner.show(err?.response?.data?.msg || 'Failed to toggle sharing', 'error')
+    }
+  }
+  function copyPublicLink(e, plan){
+    e.stopPropagation()
+    const url = `${window.location.origin}/share/${plan.public_id}`
+    navigator.clipboard.writeText(url)
+    banner.show('Public link copied to clipboard', 'info')
   }
   function PlanModal({ plan, onClose }) {
     if (!plan) return null;
@@ -41,6 +63,10 @@ export default function PlansPage(){
           <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-black text-2xl">&times;</button>
           <h2 className="text-2xl font-bold mb-2">{plan.title}</h2>
           <div className="text-sm text-gray-500 mb-4">Generated: {new Date(plan.generated_at).toLocaleString()}</div>
+          <div className="flex items-end justify-between mb-2 gap-4">
+            <h2 className="text-2xl font-bold">{plan.title}</h2>
+            <PlanPresence planId={plan.id} currentUser={user} />
+          </div>
           <div
             className="gap-6"
             style={{
@@ -51,6 +77,10 @@ export default function PlansPage(){
               maxWidth: '100%',
             }}
           >
+            <div className="flex items-end justify-between mb-2 gap-4">
+              <h2 className="text-2xl font-bold">{plan.title}</h2>
+              <PlanPresence planId={plan.id} currentUser={{ id: 0, fullname: 'You' }} />
+            </div>
             {days.map(([day, items], dayIdx) => (
               <div key={day} className={`rounded p-3 ${dayColors[dayIdx % dayColors.length]}`} style={{minWidth:0}}>
                 <div className="font-bold mb-2">{day}</div>
@@ -97,6 +127,13 @@ export default function PlansPage(){
                 <div className="text-sm text-gray-500">{new Date(p.generated_at).toLocaleString()}</div>
               </div>
               <div className="flex gap-2">
+                <button onClick={e => { e.stopPropagation(); downloadICS(p) }} className="text-blue-600">Export .ics</button>
+                <button onClick={e => onToggleShare(e, p)} className={"" + (p.is_public ? 'text-green-700' : 'text-gray-700')}>
+                  {p.is_public ? 'Make Private' : 'Make Public'}
+                </button>
+                {p.is_public && (
+                  <button onClick={e => copyPublicLink(e, p)} className="text-indigo-600">Copy Link</button>
+                )}
                 <button onClick={e => { e.stopPropagation(); deletePlan(p.id); }} className="text-red-600">Delete</button>
               </div>
             </div>

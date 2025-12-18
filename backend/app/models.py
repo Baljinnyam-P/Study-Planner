@@ -76,9 +76,14 @@ class Task(db.Model):
     due_date = db.Column(db.DateTime, nullable=True)
     priority = db.Column(db.Integer, default=3)
     completed = db.Column(db.Boolean, default=False)
+    # Optional advanced fields
+    depends_on_id = db.Column(db.Integer, db.ForeignKey('tasks.id'), nullable=True)
+    recurrence = db.Column(db.String(20), nullable=True)  # e.g., 'daily','weekly','monthly'
+    reminder_minutes_before = db.Column(db.Integer, nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
     user = db.relationship("User", back_populates="tasks")
+    depends_on = db.relationship('Task', remote_side=[id], uselist=False)
 
 class StudyPlan(db.Model):
     __tablename__ = "study_plans"
@@ -87,6 +92,9 @@ class StudyPlan(db.Model):
     title = db.Column(db.String(200), default="Auto-generated Plan")
     content = db.Column(db.JSON, nullable=False)
     generated_at = db.Column(db.DateTime, default=datetime.utcnow)
+    # Public sharing
+    is_public = db.Column(db.Boolean, default=False)
+    public_id = db.Column(db.String(36), unique=True, nullable=True)
 
     user = db.relationship("User", back_populates="plans")
 

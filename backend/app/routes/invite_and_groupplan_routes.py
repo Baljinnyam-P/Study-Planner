@@ -15,6 +15,7 @@ from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..extensions import db
 from ..models import User, StudyGroup, GroupMembership, GroupInvite, GroupPlan, GroupPlanParticipant, Notification, GroupPlanTask
+from ..sockets import notify_user
 from ..schemas import group_invite_schema, group_invites_schema, group_plan_schema, group_plans_schema, group_plan_task_schema, group_plan_tasks_schema
 from datetime import datetime
 
@@ -54,9 +55,11 @@ def send_invite():
     inviter = User.query.get(user_id)
     group_name = group.name if hasattr(group, 'name') else f"Group #{group_id}"
     notif_msg = f"You were invited to join '{group_name}' by {inviter.fullname if inviter else 'a user'}"
-    notif = Notification(user_id=invitee.id, message=notif_msg, type="invite", invite_id=invite.id)
-    db.session.add(notif)
     db.session.commit()
+    try:
+        notify_user(invitee.id, notif_msg, 'invite', invite.id)
+    except Exception:
+        pass
     return jsonify(group_invite_schema.dump(invite)), 201
 
 @invites_bp.route('/pending', methods=['GET'])
@@ -192,13 +195,11 @@ def join_group_plan(plan_id):
     if not GroupPlanParticipant.query.filter_by(plan_id=plan.id, user_id=user_id).first():
         db.session.add(GroupPlanParticipant(plan_id=plan.id, user_id=user_id))
     # Notify creator
-    notif = Notification(
-        user_id=plan.created_by,
-        message=f"User #{user_id} joined your plan '{plan.title}'",
-        type='plan'
-    )
-    db.session.add(notif)
     db.session.commit()
+    try:
+        notify_user(plan.created_by, f"User #{user_id} joined your plan '{plan.title}'", 'plan')
+    except Exception:
+        pass
     return jsonify({'msg': 'Joined plan'}), 200
 
 @group_plans_bp.route('/<int:plan_id>/participants', methods=['GET'])

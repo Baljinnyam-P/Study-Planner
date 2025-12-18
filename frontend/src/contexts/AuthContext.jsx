@@ -7,6 +7,7 @@
 //   - Makes it easy to update or extend authentication features.
 import React, { createContext, useContext, useEffect, useState } from 'react'
 import api from '../api/axios'
+import { getSocket, joinRoom, leaveRoom } from '../lib/socket'
 
 const AuthContext = createContext(null)
 export function AuthProvider({ children }){
@@ -27,6 +28,25 @@ export function AuthProvider({ children }){
   }
 
   useEffect(()=>{ loadUser() }, [])
+
+  // Join user room for socket notifications when user changes
+  useEffect(()=>{
+    const s = getSocket()
+    function onNotify(payload){
+      // Broadcast a custom event; NotificationBell can listen to refresh
+      window.dispatchEvent(new CustomEvent('sp-notify', { detail: payload }))
+    }
+    s.on('notify', onNotify)
+    if (user?.id){
+      joinRoom(`user:${user.id}`, { id: user.id, name: user.fullname })
+    }
+    return ()=>{
+      s.off('notify', onNotify)
+      if (user?.id){
+        leaveRoom(`user:${user.id}`)
+      }
+    }
+  }, [user?.id])
 
   const login = async (email, password) => {
     const res = await api.post('/auth/login', { email, password })

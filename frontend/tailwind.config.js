@@ -6,6 +6,7 @@
 //   - Makes it easy to customize the app's design system.
 
 export default {
+  darkMode: 'class',
   content: ['./index.html', './src/**/*.{js,jsx}'],
   theme: {
     extend: {

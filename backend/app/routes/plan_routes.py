@@ -12,6 +12,7 @@
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from ..extensions import db
+from ..sockets import emit_plan_updated
 from ..models import StudyPlan, Task
 from ..schemas import plan_schema, plans_schema
 
@@ -44,6 +45,11 @@ def create_plan():
         return jsonify({'errors': errors}), 400
     plan = StudyPlan(user_id=user_id, title=data.get('title','Saved Plan'), content=data['content'])
     db.session.add(plan); db.session.commit()
+    # Real-time: notify listeners that a plan was created/updated
+    try:
+        emit_plan_updated(plan.id, {'type':'created', 'plan': plan_schema.dump(plan)})
+    except Exception:
+        pass
     return jsonify(plan_schema.dump(plan)), 201
 
 @plans_bp.route('/<int:plan_id>', methods=['DELETE'])
@@ -136,6 +142,10 @@ def regenerate_plan(plan_id):
         result[f"Day {day}"].append(item)
     plan.content = result
     db.session.commit()
+    try:
+        emit_plan_updated(plan.id, {'type':'regenerated', 'plan': plan_schema.dump(plan)})
+    except Exception:
+        pass
     return jsonify(plan_schema.dump(plan)), 200
 
 # Update a plan (e.g. rename title)
@@ -152,4 +162,8 @@ def update_plan(plan_id):
     if 'content' in data:
         plan.content = data['content']
     db.session.commit()
+    try:
+        emit_plan_updated(plan.id, {'type':'updated', 'plan': plan_schema.dump(plan)})
+    except Exception:
+        pass
     return jsonify(plan_schema.dump(plan)), 200

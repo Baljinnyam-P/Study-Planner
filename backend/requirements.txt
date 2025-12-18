@@ -22,3 +22,5 @@ pymysql
 cryptography
 Flask-Migrate
 psycopg2-binary
+flask-socketio
+eventlet

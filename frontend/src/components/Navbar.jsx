@@ -9,9 +9,11 @@ import React from 'react'
 import NotificationBell from './NotificationBell'
 import { Link } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
+import { useTheme } from '../contexts/ThemeContext'
 
 export default function Navbar(){
   const { user, logout } = useAuth()
+  const { dark, setDark, accent, setAccent } = useTheme()
   return (
     <nav className="bg-white shadow">
       <div className="max-w-6xl mx-auto px-4 py-3 flex justify-between items-center">
@@ -20,10 +22,23 @@ export default function Navbar(){
           {user && <>
             <Link to="/planner" className="text-sm">Planner</Link>
             <Link to="/plans" className="text-sm">Plans</Link>
+            <Link to="/calendar" className="text-sm">Calendar</Link>
+            <Link to="/analytics" className="text-sm">Analytics</Link>
             <Link to="/groups" className="text-sm">Groups</Link>
           </>}
         </div>
-        <div>
+        <div className="flex items-center gap-4">
+          <div className="flex items-center gap-2 text-xs">
+            <button onClick={()=>setDark(!dark)} className="px-2 py-1 border rounded">
+              {dark ? 'Light' : 'Dark'}
+            </button>
+            <select value={accent} onChange={e=>setAccent(e.target.value)} className="border rounded px-2 py-1">
+              <option value="blue">Blue</option>
+              <option value="purple">Purple</option>
+              <option value="emerald">Emerald</option>
+              <option value="rose">Rose</option>
+            </select>
+          </div>
           {user ? (
             <div className="flex items-center gap-3">
               <NotificationBell />
