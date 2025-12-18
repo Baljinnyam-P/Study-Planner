@@ -4,7 +4,8 @@
 // -------------------------------------------------------------
 import { io } from 'socket.io-client'
 
-const base = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000/api'
+// Use same env var as axios to avoid mismatch
+const base = import.meta.env.VITE_API_BASE || 'http://localhost:5000/api'
 // Strip trailing /api if present to get server origin
 const origin = base.replace(/\/api\/?$/, '')
 
