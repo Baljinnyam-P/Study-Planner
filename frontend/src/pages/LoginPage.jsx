@@ -28,9 +28,9 @@ export default function LoginPage(){
     <div className="max-w-md mx-auto p-6">
       <h1 className="text-2xl font-bold">Login</h1>
       <form onSubmit={onSubmit} className="mt-4 space-y-3">
-        <input className="w-full p-2 border" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
-        <input className="w-full p-2 border" placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
-        <button className="w-full p-2 bg-blue-600 text-white rounded">Login</button>
+        <input className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]" placeholder="Email" value={email} onChange={e=>setEmail(e.target.value)} />
+        <input className="w-full p-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--accent-color)]" placeholder="Password" type="password" value={password} onChange={e=>setPassword(e.target.value)} />
+        <button className="w-full p-2 bg-[var(--accent-color)] hover:brightness-110 text-white rounded-lg transition">Login</button>
         {err && <div className="text-red-600">{err}</div>}
       </form>
     </div>

@@ -26,7 +26,14 @@ def create_app():
     # Enable CORS globally; configure allowed origins via FRONTEND_ORIGIN env (comma-separated), default to localhost
     _origins = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
     origins_list = [o.strip() for o in _origins.split(',') if o.strip()]
-    CORS(app, supports_credentials=True, origins=origins_list, methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"])
+    CORS(
+        app,
+        supports_credentials=True,
+        origins=origins_list,
+        methods=["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+        allow_headers=["Authorization", "Content-Type", "Accept"],
+        expose_headers=["Authorization"],
+    )
 
     db.init_app(app)
     ma.init_app(app)

@@ -120,14 +120,14 @@ export default function PlansPage(){
       <Banner msg={banner.msg} type={banner.type} />
       <div className="mt-4 space-y-4">
         {plans.map(p => (
-          <div key={p.id} className="bg-white p-4 rounded shadow hover:ring-2 hover:ring-blue-300 cursor-pointer transition" onClick={() => setModalPlan(p)}>
+          <div key={p.id} className="glass-card p-4 rounded hover:ring-2 hover:ring-[var(--accent-color)] cursor-pointer transition" onClick={() => setModalPlan(p)}>
             <div className="flex justify-between">
               <div>
                 <div className="font-semibold">{p.title}</div>
                 <div className="text-sm text-gray-500">{new Date(p.generated_at).toLocaleString()}</div>
               </div>
               <div className="flex gap-2">
-                <button onClick={e => { e.stopPropagation(); downloadICS(p) }} className="text-blue-600">Export .ics</button>
+                <button onClick={e => { e.stopPropagation(); downloadICS(p) }} className="text-[var(--accent-color)] hover:underline">Export .ics</button>
                 <button onClick={e => onToggleShare(e, p)} className={"" + (p.is_public ? 'text-green-700' : 'text-gray-700')}>
                   {p.is_public ? 'Make Private' : 'Make Public'}
                 </button>

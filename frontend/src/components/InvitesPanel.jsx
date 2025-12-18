@@ -47,7 +47,7 @@ export default function InvitesPanel() {
   }
 
   return (
-    <div className="bg-white p-4 rounded shadow mb-6">
+    <div className="glass-card p-4 mb-6">
       <h2 className="font-semibold mb-2">Pending Group Invites</h2>
       <Banner msg={banner.msg} type={banner.type} />
       {loading ? <div>Loading...</div> : (
@@ -57,8 +57,8 @@ export default function InvitesPanel() {
               <li key={inv.id} className="flex items-center justify-between">
                 <span>Group #{inv.group_id} (Invited by User #{inv.inviter_id})</span>
                 <span>
-                  <button className="bg-green-600 text-white px-2 py-1 rounded mr-2" onClick={() => handleRespond(inv.id, 'accept')}>Accept</button>
-                  <button className="bg-red-600 text-white px-2 py-1 rounded" onClick={() => handleRespond(inv.id, 'decline')}>Decline</button>
+                  <button className="bg-[var(--accent-color)] text-white px-2 py-1 rounded mr-2 hover:brightness-110" onClick={() => handleRespond(inv.id, 'accept')}>Accept</button>
+                  <button className="bg-red-500 text-white px-2 py-1 rounded hover:brightness-110" onClick={() => handleRespond(inv.id, 'decline')}>Decline</button>
                 </span>
               </li>
             ))}

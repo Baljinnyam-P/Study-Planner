@@ -9,4 +9,37 @@ Why this design?
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-body { font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial; }
+
+body {
+	font-family: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+	background: var(--bg-gradient, linear-gradient(135deg, #f0f4ff 0%, #f3e8ff 100%));
+	transition: background 0.3s;
+}
+
+:root {
+	--accent-color: #2563eb; /* blue-600 */
+	--bg-gradient: linear-gradient(135deg, #f0f4ff 0%, #f3e8ff 100%);
+	--navbar-bg: #ffffffcc;
+	--card-bg: #ffffffcc;
+}
+
+.dark {
+	--accent-color: #a78bfa; /* purple-400 */
+	--bg-gradient: linear-gradient(135deg, #18181b 0%, #23272f 100%);
+	--navbar-bg: #18181bcc;
+	--card-bg: #23272fbb;
+}
+
+.glass-card {
+	background: var(--card-bg);
+	box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+	backdrop-filter: blur(8px);
+	border-radius: 1.25rem;
+	border: 1px solid rgba(255,255,255,0.18);
+}
+
+.navbar-glass {
+	background: var(--navbar-bg);
+	backdrop-filter: blur(8px);
+	border-bottom: 1px solid rgba(0,0,0,0.04);
+}

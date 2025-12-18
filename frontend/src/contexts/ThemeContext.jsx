@@ -16,9 +16,17 @@ export function ThemeProvider({ children }){
     localStorage.setItem('theme', dark? 'dark':'light')
   }, [dark])
 
-  React.useEffect(()=>{
-    document.documentElement.style.setProperty('--accent', accent)
-    localStorage.setItem('accent', accent)
+
+  React.useEffect(() => {
+    // Map accent to real color value
+    const accentMap = {
+      blue: '#2563eb',
+      purple: '#a78bfa',
+      emerald: '#10b981',
+      rose: '#f43f5e',
+    };
+    document.documentElement.style.setProperty('--accent-color', accentMap[accent] || accentMap.blue);
+    localStorage.setItem('accent', accent);
   }, [accent])
 
   const value = { dark, setDark, accent, setAccent }
