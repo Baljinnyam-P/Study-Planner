@@ -1,35 +1,42 @@
 """create all tables
 
 Revision ID: 001_create_all_tables
-Revises: 
+Revises: a2b29d1f67e4
 Create Date: 2025-12-18 06:20:00.000000
 
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy import inspect
 
 
 # revision identifiers, used by Alembic.
 revision = '001_create_all_tables'
-down_revision = None
+down_revision = 'a2b29d1f67e4'
 branch_labels = None
 depends_on = None
 
 
 def upgrade():
+    conn = op.get_bind()
+    inspector = inspect(conn)
+    existing_tables = inspector.get_table_names()
+    
     # Create users table
-    op.create_table('users',
-    sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('fullname', sa.String(length=120), nullable=False),
-    sa.Column('email', sa.String(length=200), nullable=False),
-    sa.Column('password_hash', sa.String(length=256), nullable=False),
-    sa.Column('created_at', sa.DateTime(), nullable=True),
-    sa.PrimaryKeyConstraint('id')
-    )
-    op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
+    if 'users' not in existing_tables:
+        op.create_table('users',
+        sa.Column('id', sa.Integer(), nullable=False),
+        sa.Column('fullname', sa.String(length=120), nullable=False),
+        sa.Column('email', sa.String(length=200), nullable=False),
+        sa.Column('password_hash', sa.String(length=256), nullable=False),
+        sa.Column('created_at', sa.DateTime(), nullable=True),
+        sa.PrimaryKeyConstraint('id')
+        )
+        op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
 
     # Create study_groups table
-    op.create_table('study_groups',
+    if 'study_groups' not in existing_tables:
+        op.create_table('study_groups',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('name', sa.String(length=120), nullable=False),
     sa.Column('description', sa.Text(), nullable=True),
@@ -40,7 +47,8 @@ def upgrade():
     )
 
     # Create group_memberships table
-    op.create_table('group_memberships',
+    if 'group_memberships' not in existing_tables:
+        op.create_table('group_memberships',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=False),
@@ -52,7 +60,8 @@ def upgrade():
     )
 
     # Create tasks table
-    op.create_table('tasks',
+    if 'tasks' not in existing_tables:
+        op.create_table('tasks',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=200), nullable=False),
@@ -71,7 +80,8 @@ def upgrade():
     )
 
     # Create study_plans table
-    op.create_table('study_plans',
+    if 'study_plans' not in existing_tables:
+        op.create_table('study_plans',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=200), nullable=True),
@@ -85,7 +95,8 @@ def upgrade():
     )
 
     # Create group_invites table
-    op.create_table('group_invites',
+    if 'group_invites' not in existing_tables:
+        op.create_table('group_invites',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('inviter_id', sa.Integer(), nullable=False),
     sa.Column('invitee_id', sa.Integer(), nullable=False),
@@ -99,7 +110,8 @@ def upgrade():
     )
 
     # Create group_plans table
-    op.create_table('group_plans',
+    if 'group_plans' not in existing_tables:
+        op.create_table('group_plans',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('group_id', sa.Integer(), nullable=False),
     sa.Column('title', sa.String(length=200), nullable=False),
@@ -114,7 +126,8 @@ def upgrade():
     )
 
     # Create group_plan_tasks table
-    op.create_table('group_plan_tasks',
+    if 'group_plan_tasks' not in existing_tables:
+        op.create_table('group_plan_tasks',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('plan_id', sa.Integer(), nullable=False),
     sa.Column('task', sa.String(length=255), nullable=False),
@@ -128,7 +141,8 @@ def upgrade():
     )
 
     # Create group_plan_participants table
-    op.create_table('group_plan_participants',
+    if 'group_plan_participants' not in existing_tables:
+        op.create_table('group_plan_participants',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('plan_id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
@@ -139,7 +153,8 @@ def upgrade():
     )
 
     # Create notifications table
-    op.create_table('notifications',
+    if 'notifications' not in existing_tables:
+        op.create_table('notifications',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=False),
     sa.Column('message', sa.String(length=255), nullable=False),
