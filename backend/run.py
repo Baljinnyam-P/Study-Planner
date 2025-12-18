@@ -1,3 +1,7 @@
+# Eventlet monkey patching MUST be the first thing before any other imports
+import eventlet
+eventlet.monkey_patch()
+
 # -------------------------------------------------------------
 # Why: This file is the WSGI entry point for deploying the Flask app.
 #
