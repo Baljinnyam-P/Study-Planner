@@ -1,24 +1,19 @@
 # Study Planner Codebase Reference
 # Study Planner
 
-##Overview
+### Overview
+StudyPlanner is a modern, collaborative web application designed to help students and professionals efficiently plan, track, and achieve their study goals.
+Why: Traditional study tools lack real collaboration, flexible scheduling, and a user-friendly experience. StudyPlanner solves this by enabling group planning, intuitive drag-and-drop task management, and a beautiful, responsive interface.
 
-Study Planner is a modern, collaborative web application for managing personal and group study plans. It features a Flask backend and a React frontend, supporting authentication, Plan generation, drag-and-drop editing, and group collaboration. The project is designed for extensibility, maintainability, and a seamless user experience.
+### How:
 
+Built with a Flask REST API (Python, SQLAlchemy, Marshmallow, JWT) for secure, scalable backend logic and robust data validation.
+React (with Tailwind CSS and react-beautiful-dnd) powers a responsive, interactive frontend with drag-and-drop scheduling and real-time feedback.
+PostgreSQL database (deployed on Render) ensures reliable, cloud-based data storage.
+Features include authentication, group invites, plan preview/editing, analytics, and extensible architecture for future enhancements.
 
-## Features
-
-- User registration, login, and JWT authentication
-- Personal and group study plans
-- Round-Robin plan generation
-- Drag-and-drop task editing and rescheduling
-- Plan preview modal with inline editing
-- Group invites and collaboration
-- Notifications for group invites
-- Color-coded, responsive plan grid
-- Robust validation and error handling
-- Modern, responsive UI with Tailwind CSS
-- Extensible architecture for future features
+## Role:
+I designed and implemented the full-stack application, from database schema and API endpoints to frontend UI/UX, authentication, and deployment. I focused on clean code, robust validation, and a professional, portfolio-ready user experience.
 
 ## Documentation
 
