@@ -11,8 +11,13 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_marshmallow import Marshmallow
 from flask_jwt_extended import JWTManager
 from flask_socketio import SocketIO
+import os
 
 db = SQLAlchemy()
 ma = Marshmallow()
 jwt = JWTManager()
-socketio = SocketIO(cors_allowed_origins="*")
+
+# Socket.IO CORS must match frontend origin when using credentials
+_origins = os.getenv("FRONTEND_ORIGIN", "http://localhost:5173")
+origins_list = [o.strip() for o in _origins.split(',') if o.strip()]
+socketio = SocketIO(cors_allowed_origins=origins_list)
