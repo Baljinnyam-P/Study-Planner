@@ -10,7 +10,6 @@ instance/
 .env.*
 .mypy_cache/
 .pytest_cache/
-migrations/
 
 # Node
 node_modules/
@@ -42,7 +41,6 @@ backend/*.pyd
 backend/instance/
 backend/.env
 backend/.env.*
-backend/migrations/
 
 # Misc
 *.swp
