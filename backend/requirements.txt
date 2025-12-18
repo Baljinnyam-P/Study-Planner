@@ -23,4 +23,5 @@ cryptography
 Flask-Migrate
 psycopg2-binary
 flask-socketio
-eventlet
+gevent
+gevent-websocket
