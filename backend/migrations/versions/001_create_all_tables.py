@@ -12,13 +12,20 @@ from sqlalchemy import inspect
 
 # revision identifiers, used by Alembic.
 revision = '001_create_all_tables'
-down_revision = 'a2b29d1f67e4'
+down_revision = None
 branch_labels = None
 depends_on = None
 
 
 def upgrade():
     conn = op.get_bind()
+    
+    # Clear any existing alembic_version records to start fresh
+    try:
+        conn.execute(sa.text("DELETE FROM alembic_version"))
+    except:
+        pass  # Table might not exist yet
+    
     inspector = inspect(conn)
     existing_tables = inspector.get_table_names()
     
